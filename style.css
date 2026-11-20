@@ -47,7 +47,7 @@ input { font: inherit; color: inherit; }
 .mk.x { stroke: var(--x); filter: drop-shadow(0 0 10px var(--x)); animation: bob 3.2s ease-in-out infinite; }
 .mk.o { stroke: var(--o); filter: drop-shadow(0 0 10px var(--o)); animation: bob 3.2s ease-in-out infinite -1.6s; }
 @keyframes bob { 50% { transform: translateY(-6px) rotate(6deg); } }
-.logo { font-family: var(--display); font-weight: 800; font-size: clamp(44px, 13vw, 72px); letter-spacing: -.04em; line-height: .95; margin: 0;
+.logo { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 11.5vw, 72px); letter-spacing: -.04em; line-height: .95; margin: 0;
   background: linear-gradient(100deg, #fff 0%, var(--x2) 40%, var(--o2) 75%, #fff 100%); background-size: 200% 100%;
   -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 8s linear infinite; }
 .logo i { font-style: normal; color: var(--x); -webkit-text-fill-color: var(--x); }
