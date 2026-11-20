@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0b0710">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="tic tac toe">
+  <meta name="description" content="Tic tac toe for two — online, one code, five modes.">
+  <meta property="og:title" content="tic · tac · toe — you're invited">
+  <meta property="og:description" content="Tap the link and play with me.">
+  <title>tic · tac · toe</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+    <div class="grain"></div>
+  </div>
+
+  <main id="app">
+    <!-- HOME -->
+    <section id="home" class="screen">
+      <header class="brand">
+        <div class="logo-marks" aria-hidden="true">
+          <svg class="mk x" viewBox="0 0 100 100"><path d="M26 26 L74 74"/><path d="M74 26 L26 74"/></svg>
+          <svg class="mk o" viewBox="0 0 100 100"><circle cx="50" cy="50" r="25"/></svg>
+        </div>
+        <h1 class="logo">tic<i>·</i>tac<i>·</i>toe</h1>
+        <p class="tagline">one code. two players. no mercy.</p>
+      </header>
+
+      <div class="card">
+        <label class="field">
+          <span>Your name</span>
+          <input id="nameInput" maxlength="16" autocomplete="nickname" placeholder="e.g. Kafish" enterkeyhint="done">
+        </label>
+
+        <button id="createBtn" class="btn primary">Create a room</button>
+
+        <div class="join-row">
+          <input id="codeInput" class="code-input" maxlength="6" placeholder="CODE" autocomplete="off"
+                 autocapitalize="characters" spellcheck="false" enterkeyhint="go" aria-label="Room code">
+          <button id="joinBtn" class="btn">Join</button>
+        </div>
+
+        <div class="divider"><span>or</span></div>
+        <button id="localBtn" class="btn ghost">Play on one phone</button>
+      </div>
+
+      <footer class="foot">made with <span class="heart">♥</span> by Kafish</footer>
+    </section>
+
+    <!-- GAME -->
+    <section id="game" class="screen hidden">
+      <div class="topbar">
+        <button id="backBtn" class="icon-btn" aria-label="Leave">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button id="roomChip" class="room-chip" aria-label="Share room">
+          <span id="netDot" class="net-dot"></span>
+          <span id="roomCode" class="room-code">—</span>
+          <span class="share-label">share</span>
+        </button>
+        <button id="soundBtn" class="icon-btn" aria-label="Sound"></button>
+      </div>
+
+      <div class="players">
+        <div class="player" id="pX">
+          <svg class="pmark x" viewBox="0 0 100 100"><path d="M28 28 L72 72"/><path d="M72 28 L28 72"/></svg>
+          <div class="pinfo"><div class="pname"></div><div class="pstatus"></div></div>
+          <div class="pscore">0</div>
+        </div>
+        <div class="draws"><b id="drawCount">0</b><small>draws</small></div>
+        <div class="player" id="pO">
+          <svg class="pmark o" viewBox="0 0 100 100"><circle cx="50" cy="50" r="24"/></svg>
+          <div class="pinfo"><div class="pname"></div><div class="pstatus"></div></div>
+          <div class="pscore">0</div>
+        </div>
+      </div>
+
+      <div id="status" class="status" aria-live="polite"></div>
+
+      <div id="boardWrap" class="board-wrap">
+        <div id="board" class="board"></div>
+        <div id="invite" class="invite hidden">
+          <p class="invite-k">waiting for your player 2</p>
+          <div id="inviteCode" class="invite-code">——————</div>
+          <button id="inviteShare" class="btn primary">Send the invite</button>
+          <p class="invite-s">they open the link (or type the code) and you're live.</p>
+        </div>
+        <div id="connecting" class="invite hidden">
+          <div class="spinner"></div>
+          <p class="invite-k" id="connectingText">connecting…</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="rematchBtn" class="btn primary hidden">Play again</button>
+      </div>
+
+      <div class="modes" id="modes" role="tablist"></div>
+      <p id="modeDesc" class="mode-desc"></p>
+
+      <div class="reactions" id="reactions"></div>
+    </section>
+  </main>
+
+  <div id="floaters" aria-hidden="true"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div id="toast" role="status"></div>
+
+  <script src="vendor/mqtt.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
