@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#0b0710">
+  <meta name="theme-color" content="#0f0f10" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f7f6f3" media="(prefers-color-scheme: light)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,31 +12,23 @@
   <meta name="description" content="Tic tac toe for two — online, one code, five modes.">
   <meta property="og:title" content="tic · tac · toe — you're invited">
   <meta property="og:description" content="Tap the link and play with me.">
-  <title>tic · tac · toe</title>
+  <title>tic tac toe</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="bg" aria-hidden="true">
-    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
-    <div class="grain"></div>
-  </div>
 
   <main id="app">
     <!-- HOME -->
     <section id="home" class="screen">
       <header class="brand">
-        <div class="logo-marks" aria-hidden="true">
-          <svg class="mk x" viewBox="0 0 100 100"><path d="M26 26 L74 74"/><path d="M74 26 L26 74"/></svg>
-          <svg class="mk o" viewBox="0 0 100 100"><circle cx="50" cy="50" r="25"/></svg>
-        </div>
-        <h1 class="logo">tic<i>·</i>tac<i>·</i>toe</h1>
-        <p class="tagline">one code. two players. no mercy.</p>
+        <h1 class="logo">tic tac toe</h1>
+        <p class="tagline">for two.</p>
       </header>
 
       <div class="card">
@@ -56,7 +49,7 @@
         <button id="localBtn" class="btn ghost">Play on one phone</button>
       </div>
 
-      <footer class="foot">made with <span class="heart">♥</span> by Kafish</footer>
+      <footer class="foot">by Kafish</footer>
     </section>
 
     <!-- GAME -->
@@ -68,7 +61,7 @@
         <button id="roomChip" class="room-chip" aria-label="Share room">
           <span id="netDot" class="net-dot"></span>
           <span id="roomCode" class="room-code">—</span>
-          <span class="share-label">share</span>
+          <span class="share-label">Share</span>
         </button>
         <button id="soundBtn" class="icon-btn" aria-label="Sound"></button>
       </div>
@@ -92,7 +85,7 @@
       <div id="boardWrap" class="board-wrap">
         <div id="board" class="board"></div>
         <div id="invite" class="invite hidden">
-          <p class="invite-k">waiting for your player 2</p>
+          <p class="invite-k">waiting for player 2</p>
           <div id="inviteCode" class="invite-code">——————</div>
           <button id="inviteShare" class="btn primary">Send the invite</button>
           <p class="invite-s">they open the link (or type the code) and you're live.</p>

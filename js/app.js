@@ -320,12 +320,12 @@ function renderStatus() {
   const seat = mySeat();
   let t = '', cls = 'status';
   if (kind === 'online' && !S.players.O) t = 'Waiting for player 2…';
-  else if (g.winner === 'draw') { t = 'Draw. Nobody blinks.'; cls += ' draw'; }
+  else if (g.winner === 'draw') { t = 'Draw'; cls += ' draw'; }
   else if (g.winner) {
     const w = g.winner;
     const misere = g.mode === 'misere' ? ` — ${nameOf(other(w))} made three` : '';
-    if (kind === 'online' && seat) t = (w === seat ? 'You win ✦' : `${nameOf(w)} wins`) + misere;
-    else t = `${nameOf(w)} wins ✦` + misere;
+    if (kind === 'online' && seat) t = (w === seat ? 'You win' : `${nameOf(w)} wins`) + misere;
+    else t = `${nameOf(w)} wins` + misere;
     cls += ' ' + w.toLowerCase();
   } else if (kind === 'online' && !seat) t = `Watching · ${nameOf(g.turn)}'s move`;
   else if (kind === 'online') t = myTurn() ? 'Your move' : `${nameOf(g.turn)}'s move…`;
@@ -482,14 +482,15 @@ let parts = [], fxRun = false;
 function sizeFx() { fx.width = innerWidth * devicePixelRatio; fx.height = innerHeight * devicePixelRatio; }
 addEventListener('resize', sizeFx); sizeFx();
 function confetti(p) {
-  const cols = p === 'X' ? ['#ff3d8b', '#ff8cc0', '#fff1f7', '#ffb3d1'] : ['#a78bff', '#d4c6ff', '#f3efff', '#7c5cff'];
+  const css = getComputedStyle(document.documentElement);
+  const cols = [css.getPropertyValue(p === 'X' ? '--x' : '--o').trim() || '#888', css.getPropertyValue('--mute').trim() || '#999'];
   const W = fx.width, H = fx.height;
-  for (let i = 0; i < 160; i++) {
+  for (let i = 0; i < 70; i++) {
     parts.push({
       x: W / 2 + (Math.random() - .5) * W * .3, y: H * .45,
       vx: (Math.random() - .5) * 26 * devicePixelRatio, vy: (-Math.random() * 22 - 6) * devicePixelRatio,
       r: (Math.random() * 5 + 3) * devicePixelRatio, c: cols[i % cols.length], a: Math.random() * 6, va: (Math.random() - .5) * .4,
-      heart: Math.random() < .25, life: 1,
+      heart: false, life: 1,
     });
   }
   if (!fxRun) { fxRun = true; requestAnimationFrame(tick); }
@@ -555,14 +556,14 @@ function roomLink() { return location.origin + location.pathname + '?room=' + ro
 async function share() {
   if (kind !== 'online' || !room) return;
   const url = roomLink();
-  const text = `Come play tic tac toe with me 😏 Room code: ${room}`;
+  const text = `Play tic tac toe with me. Code: ${room}`;
   if (navigator.share) {
     try { await navigator.share({ title: 'tic · tac · toe', text, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; }
   }
-  try { await navigator.clipboard.writeText(`${text}\n${url}`); toast('Invite link copied ✦'); }
+  try { await navigator.clipboard.writeText(`${text}\n${url}`); toast('Invite link copied'); }
   catch {
     const ta = document.createElement('textarea'); ta.value = `${text}\n${url}`; document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); toast('Invite link copied ✦'); } catch { toast(url); }
+    try { document.execCommand('copy'); toast('Invite link copied'); } catch { toast(url); }
     ta.remove();
   }
 }
