@@ -11,7 +11,7 @@ export const DEFAULT_BROKERS = [
 const NS = 'kafish-ttt/v1/';
 
 export class Relay {
-  constructor(room, myId, { onState, onEvent, onStatus, onReady }) {
+  constructor(room, myId, { onState, onEvent, onStatus, onReady, onChatLog }) {
     this.room = room;
     this.myId = myId;
     this.base = NS + room;
@@ -20,7 +20,9 @@ export class Relay {
     this.onState = onState;
     this.onEvent = onEvent;
     this.onStatus = onStatus;
-    this.onReady = onReady;         // fires once, ~2s after the first relay connects
+    this.onReady = onReady;
+    this.onChatLog = onChatLog || (() => {});
+    this.getChat = () => null;   // set by app — chat log to push to late relays         // fires once, ~2s after the first relay connects
     this.readyFired = false;
     this.getState = () => null;     // set by app — current state to push to late relays
     this.closed = false;
@@ -47,13 +49,15 @@ export class Relay {
       client.on('connect', () => {
         entry.up = true;
         this._status();
-        client.subscribe([this.base + '/state', this.base + '/evt'], { qos: 1 }, err => {
+        client.subscribe([this.base + '/state', this.base + '/evt', this.base + '/chat'], { qos: 1 }, err => {
           if (err) return;
           // give retained state a moment to arrive, then make sure this relay has our latest
           setTimeout(() => {
             if (this.closed) return;
             const s = this.getState();
             if (s) this._pub(entry, this.base + '/state', s, true);
+            const c = this.getChat();
+            if (c && c.length) this._pub(entry, this.base + '/chat', c, true);
             if (!this.readyFired) { this.readyFired = true; this.onReady && this.onReady(); }
           }, 2000);
         });
@@ -74,6 +78,7 @@ export class Relay {
     try { m = JSON.parse(buf.toString()); } catch { return; }
     if (!m || typeof m !== 'object') return;
     if (topic.endsWith('/state')) { this.onState(m); return; }
+    if (topic.endsWith('/chat')) { if (Array.isArray(m)) this.onChatLog(m); return; }
     if (m.from === this.myId) return;
     if (m.mid) {
       if (this.seen.has(m.mid)) return;
@@ -95,11 +100,15 @@ export class Relay {
     this.clients.forEach(e => this._pub(e, this.base + '/state', state, true));
   }
 
-  send(type, data = {}) {
+  publishChat(log) {
+    this.clients.forEach(e => this._pub(e, this.base + '/chat', log, true));
+  }
+
+  send(type, data = {}, qos = 0) {
     const m = { ...data, type, from: this.myId, mid: Math.random().toString(36).slice(2) + Date.now().toString(36) };
     this.clients.forEach(e => {
       if (!e.up) return;
-      try { e.client.publish(this.base + '/evt', JSON.stringify(m), { qos: 0, retain: false }); } catch {}
+      try { e.client.publish(this.base + '/evt', JSON.stringify(m), { qos, retain: false }); } catch {}
     });
   }
 

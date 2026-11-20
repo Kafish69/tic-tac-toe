@@ -1,5 +1,6 @@
 import { MODES, newGame, play, canPlay, fadingCell, validGame } from './engine.js';
 import { Relay, DEFAULT_BROKERS } from './net.js';
+import { initChat, chatEnterRoom, chatLeave, onChatEvent, onChatLog, getChatLog } from './chat.js';
 
 /* ---------------- helpers ---------------- */
 const $ = s => document.querySelector(s);
@@ -158,6 +159,9 @@ function onEvent(m) {
   } else if (m.type === 'bye') {
     delete peers[m.from];
     renderPlayers();
+  } else if (m.type === 'chat' || m.type === 'typing') {
+    peers[m.from] = Date.now();
+    onChatEvent(m);
   } else if (m.type === 'emo' && REACTIONS.includes(m.e)) {
     floatEmoji(m.e);
     sfx('pop');
@@ -193,6 +197,7 @@ function enterOnline(code, create) {
     onState: onRemoteState,
     onEvent,
     onStatus: netStatus,
+    onChatLog,
     onReady: () => {
       if (!S) { commit(freshState()); toast('New room created — share the code'); }
       else ensureSeat();
@@ -200,6 +205,8 @@ function enterOnline(code, create) {
     },
   });
   relay.getState = () => S;
+  relay.getChat = getChatLog;
+  chatEnterRoom(code);
   relay.connect(brokers);
 
   timers.push(setInterval(sayHi, 4000));
@@ -219,6 +226,7 @@ function enterLocal() {
   }
   S.players.X = { id: 'local-X', name: myName || 'Player 1' };
   lastAnimV = S.v;
+  chatEnterRoom(null);
   history.replaceState(null, '', location.pathname);
   showGame();
   render();
@@ -226,6 +234,7 @@ function enterLocal() {
 
 function leave(silent) {
   timers.forEach(clearInterval); timers = [];
+  chatLeave();
   if (relay) { relay.close(); relay = null; }
   S = null; kind = null; room = null;
   document.title = baseTitle;
@@ -605,6 +614,13 @@ $('#board').addEventListener('click', e => {
 });
 addEventListener('pagehide', () => { if (relay) relay.send('bye'); });
 
+initChat({
+  myId,
+  relay: () => relay,
+  name: () => myName,
+  opponentName: () => { const s = mySeat(); return s && S && S.players[other(s)] ? S.players[other(s)].name : ''; },
+  toast, sfx, vibrate, flashTitle,
+});
 renderSound();
 renderReactions();
 renderModes();
