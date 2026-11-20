@@ -63,13 +63,7 @@
           <span id="roomCode" class="room-code">—</span>
           <span class="share-label">Share</span>
         </button>
-        <div class="top-right">
-          <button id="chatBtn" class="icon-btn chat-btn" aria-label="Chat">
-            <svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.1A8 8 0 1120 12z"/></svg>
-            <span id="chatBadge" class="badge hidden">0</span>
-          </button>
-          <button id="soundBtn" class="icon-btn" aria-label="Sound"></button>
-        </div>
+        <button id="soundBtn" class="icon-btn" aria-label="Sound"></button>
       </div>
 
       <div class="players">
@@ -112,31 +106,6 @@
       <div class="reactions" id="reactions"></div>
     </section>
   </main>
-
-  <!-- CHAT -->
-  <aside id="chat" class="sheet hidden" aria-label="Chat">
-    <div class="sheet-head">
-      <div class="sheet-title"><b id="chatTitle">Chat</b><small id="typing"></small></div>
-      <button id="chatClose" class="icon-btn" aria-label="Close chat">
-        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </div>
-    <div id="msgs" class="msgs"><p class="empty">Say something nice.</p></div>
-    <div id="gifPanel" class="gif-panel hidden">
-      <div class="gif-top">
-        <input id="gifQuery" class="gif-query" placeholder="Search GIFs" autocomplete="off" enterkeyhint="search">
-      </div>
-      <div id="gifGrid" class="gif-grid"></div>
-      <p id="gifNote" class="gif-note"></p>
-    </div>
-    <form id="composer" class="composer" autocomplete="off">
-      <button type="button" id="gifBtn" class="gif-btn" aria-label="GIFs">GIF</button>
-      <input id="msgInput" class="msg-input" placeholder="Message" maxlength="500" enterkeyhint="send">
-      <button type="submit" id="sendBtn" class="send-btn" aria-label="Send">
-        <svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
-      </button>
-    </form>
-  </aside>
 
   <div id="floaters" aria-hidden="true"></div>
   <canvas id="fx" aria-hidden="true"></canvas>
